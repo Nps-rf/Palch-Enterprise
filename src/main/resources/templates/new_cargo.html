@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Добавить груз</title>
+  <link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<h1>Добавить груз</h1>
+<form id="new-cargo-form">
+  <label for="cargo-name">Название груза:</label>
+  <input type="text" id="cargo-name" required>
+
+  <label for="cargo-content">Содержимое груза:</label>
+  <textarea id="cargo-content" required></textarea>
+
+  <label for="departure-city">Город отправки:</label>
+  <input type="text" id="departure-city" required>
+
+  <label for="departure-date">Дата отправки:</label>
+  <input type="date" id="departure-date" required>
+
+  <label for="arrival-city">Город прибытия:</label>
+  <input type="text" id="arrival-city" required>
+
+  <label for="arrival-date">Дата прибытия:</label>
+  <input type="date" id="arrival-date" required>
+
+  <button type="submit">Добавить груз</button>
+</form>
+<a href="/">Вернуться на главную страницу</a>
+
+</body>
+</html>
