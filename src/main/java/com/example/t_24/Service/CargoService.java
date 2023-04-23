@@ -1,6 +1,9 @@
-package com.example.t_24;
+package com.example.t_24.Service;
 
 import java.util.List;
+
+import com.example.t_24.Entity.Cargo;
+import com.example.t_24.Repository.CargoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

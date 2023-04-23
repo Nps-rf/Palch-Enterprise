@@ -1,7 +1,8 @@
-package com.example.t_24;
+package com.example.t_24.Repository;
 
 import java.util.List;
 
+import com.example.t_24.Entity.Cargo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
