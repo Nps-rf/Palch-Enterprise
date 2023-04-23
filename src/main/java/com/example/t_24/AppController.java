@@ -11,19 +11,23 @@ import java.util.List;
 
 @Controller
 public class AppController {
+
     @Autowired
     private CargoService service;
 
-    @RequestMapping("/")
-    public String viewHomePage(Model model, @Param("keyword") String keyword) {
-        List<Cargo> listCargos = service.listAll(keyword);
-        model.addAttribute("listCargos", listCargos);
+    @GetMapping("/")
+    public String displayHomePage(Model model,
+                                  @RequestParam(name = "keyword", required = false) String keyword,
+                                  @RequestParam(name = "departureDate", required = false) String departureDate) {
+        List<Cargo> cargos = service.listAll(keyword, departureDate);
+        model.addAttribute("listCargos", cargos);
         model.addAttribute("keyword", keyword);
-        return "index"; //index.html
+        model.addAttribute("departureDate", departureDate);
+        return "index";
     }
 
-    @RequestMapping("/new")
-    public String showNewCargoForm(Model model) {
+    @GetMapping("/new")
+    public String displayNewCargoForm(Model model) {
         Cargo cargo = new Cargo();
         model.addAttribute("Cargo", cargo);
         return "new_cargo";
@@ -35,22 +39,22 @@ public class AppController {
         return "redirect:/";
     }
 
-    @PostMapping("/edit")
-    public String saveEditedCargo(@ModelAttribute("Cargo") Cargo cargo) {
-        service.save(cargo);
-        return "redirect:/";
-    }
-
-    @RequestMapping("/edit/{id}")
-    public ModelAndView showEditCargoForm(@PathVariable(name = "id") Long id) {
+    @GetMapping("/edit/{id}")
+    public ModelAndView displayEditCargoForm(@PathVariable Long id) {
         ModelAndView mav = new ModelAndView("edit_cargo");
         Cargo cargo = service.get(id);
         mav.addObject("Cargo", cargo);
         return mav;
     }
 
-    @RequestMapping("/delete/{id}")
-    public String deleteCargo(@PathVariable(name = "id") Long id) {
+    @PostMapping("/edit")
+    public String saveEditedCargo(@ModelAttribute("Cargo") Cargo cargo) {
+        service.save(cargo);
+        return "redirect:/";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteCargo(@PathVariable Long id) {
         service.delete(id);
         return "redirect:/";
     }

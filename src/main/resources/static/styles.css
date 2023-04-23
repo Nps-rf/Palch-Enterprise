@@ -2,22 +2,56 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    background-color: #f8f8f8;
 }
 
 h1 {
-    background-color: #f1f1f1;
+    background-color: #4CAF50;
     padding: 20px;
     margin-bottom: 20px;
+    color: #ffffff;
+    text-align: center;
 }
 
-.search-container {
-    margin-left: 10px;
-    margin-bottom: 20px;
+.container {
+    max-width: 75%;
+    margin: 0 auto;
+    padding: 0 15px;
 }
 
+.search-container,
 .date-filter-container {
-    margin-left: 10px;
     margin-bottom: 20px;
+}
+
+input[type="text"],
+input[type="date"],
+textarea {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type="submit"],
+button {
+    width: auto;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+input[type="submit"]:hover,
+button:hover {
+    background-color: #45a049;
 }
 
 table {
@@ -39,6 +73,11 @@ th {
 
 td {
     background-color: #fff;
+    transition: background-color 0.3s ease;
+}
+
+td:hover {
+    background-color: #f1f1f1;
 }
 
 .cargo-counter {
@@ -46,41 +85,28 @@ td {
     margin-bottom: 20px;
 }
 
-button {
-    background-color: #4CAF50;
-    border: none;
-    color: white;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px 3px;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #45a049;
-}
-
 form {
     display: flex;
     flex-direction: column;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 4px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 label, input, textarea {
-    margin-left: 10px;
     margin-bottom: 10px;
 }
 
-input[type="submit"] {
-    margin-left: 10px;
-    width: auto;
-    margin-top: 20px;
+.histogram-container {
+    max-width: 80%;
+    margin: 2rem auto 1%;
 }
 
-#histogram-container {
-    height: 10%;
-    max-width: 70%;
-    margin: 1rem auto;
+#add-cargo-btn {
+    display: block;
+    margin-left: 10px;
+    margin-bottom: 20px;
 }

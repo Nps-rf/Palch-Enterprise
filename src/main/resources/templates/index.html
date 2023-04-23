@@ -9,105 +9,118 @@
 </head>
 <body>
 <h1>Перевозки грузов</h1>
-<div class="search-container">
-    <input type="text" placeholder="Поиск..." id="search-input">
-</div>
-<div class="date-filter-container">
-    <label for="date-filter">Фильтр по дате поставки:</label>
-    <input type="date" id="date-filter">
-</div>
-<table id="cargo-table">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Название груза</th>
-        <th>Содержимое груза</th>
-        <th>Город отправки</th>
-        <th>Дата отправки</th>
-        <th>Город прибытия</th>
-        <th>Дата прибытия</th>
-        <th>Действия</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="cargo : ${listCargos}">
-        <td th:text="${cargo.id}"></td>
-        <td th:text="${cargo.v_name}"></td>
-        <td th:text="${cargo.content}"></td>
-        <td th:text="${cargo.dispatch_city}"></td>
-        <td th:text="${cargo.departure_date}"></td>
-        <td th:text="${cargo.arrival_city}"></td>
-        <td th:text="${cargo.arrival_date}"></td>
-        <td>
-            <a th:href="@{/edit/{id}(id=${cargo.id})}">Редактировать</a> |
-            <a th:href="@{/delete/{id}(id=${cargo.id})}">Удалить</a>
-        </td>
-    </tr>
-    </tbody>
-</table>
-<script>
-    function createHistogram() {
-        const cargoRows = document.querySelectorAll("#cargo-table tbody tr");
-        const cargos = Array.from(cargoRows).map(row => {
-            return {
-                id: row.children[0].textContent,
-                v_name: row.children[1].textContent,
-                content: row.children[2].textContent,
-                dispatch_city: row.children[3].textContent,
-                departure_date: row.children[4].textContent,
-                arrival_city: row.children[5].textContent,
-                arrival_date: row.children[6].textContent
+<div class="container">
+    <div class="search-container">
+        <form th:action="@{/}" method="get">
+            <label for="date-filter">Фильтр по содержимому груза:</label>
+            <input type="text" name="keyword" placeholder="Поиск..." id="name-filter" th:value="${keyword}">
+            <label for="date-filter">Фильтр по дате отправки:</label>
+            <input type="date" name="departureDate" id="date-filter" th:value="${departureDate}">
+            <button type="submit">Применить фильтры</button>
+        </form>
+    </div>
+    <table id="cargo-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Название груза</th>
+            <th>Содержимое груза</th>
+            <th>Город отправки</th>
+            <th>Дата отправки</th>
+            <th>Город прибытия</th>
+            <th>Дата прибытия</th>
+            <th>Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="cargo : ${listCargos}">
+            <td th:text="${cargo.id}"></td>
+            <td th:text="${cargo.v_name}"></td>
+            <td th:text="${cargo.content}"></td>
+            <td th:text="${cargo.dispatch_city}"></td>
+            <td th:text="${cargo.departure_date}"></td>
+            <td th:text="${cargo.arrival_city}"></td>
+            <td th:text="${cargo.arrival_date}"></td>
+            <td>
+                <a th:href="@{/edit/{id}(id=${cargo.id})}">Редактировать</a> |
+                <a th:href="@{/delete/{id}(id=${cargo.id})}">Удалить</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <script>
+        function createHistogram() {
+            const cargoRows = document.querySelectorAll("#cargo-table tbody tr");
+            const cargos = Array.from(cargoRows).map(row => {
+                return {
+                    id: row.children[0].textContent,
+                    v_name: row.children[1].textContent,
+                    content: row.children[2].textContent,
+                    dispatch_city: row.children[3].textContent,
+                    departure_date: row.children[4].textContent,
+                    arrival_city: row.children[5].textContent,
+                    arrival_date: row.children[6].textContent
+                };
+            });
+
+            // Подготовка данных для гистограммы
+            const histogramData = cargos.reduce((acc, cargo) => {
+                const date = cargo.departure_date.split('T')[0];
+                acc[date] = (acc[date] || 0) + 1;
+                return acc;
+            }, {});
+
+            // Создаем массив с метками для каждого дня текущего месяца
+            const now = new Date();
+            const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+            const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+            const daysInMonth = [];
+            for (let day = firstDayOfMonth; day <= lastDayOfMonth; day.setDate(day.getDate() + 1)) {
+                daysInMonth.push(day.toISOString().slice(0, 10));
+            }
+
+            // Обновляем массив данных гистограммы, чтобы учитывать пустые дни
+            const dataValues = daysInMonth.map(date => histogramData[date] || 0);
+
+            const data = {
+                labels: daysInMonth,
+                datasets: [
+                    {
+                        label: 'Количество грузов',
+                        data: dataValues,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }
+                ]
             };
-        });
 
-        // Подготовка данных для гистограммы
-        const histogramData = cargos.reduce((acc, cargo) => {
-            const date = cargo.departure_date.split('T')[0];
-            acc[date] = (acc[date] || 0) + 1;
-            return acc;
-        }, {});
-
-        // Преобразование данных в формат, подходящий для Chart.js
-        const labels = Object.keys(histogramData);
-        const dataValues = Object.values(histogramData);
-
-        const data = {
-            labels: labels,
-            datasets: [
-                {
-                    label: 'Количество грузов',
-                    data: dataValues,
-                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }
-            ]
-        };
-
-        const config = {
-            type: 'bar',
-            data: data,
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
+            const config = {
+                type: 'bar',
+                data: data,
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
                     }
                 }
-            }
-        };
+            };
 
-        // Создание гистограммы
-        const histogramElement = document.getElementById('histogram');
-        new Chart(histogramElement, config);
-    }
-    document.addEventListener('DOMContentLoaded', createHistogram);
-</script>
-<div class="cargo-counter">
-    Всего грузов: <span th:text="${#lists.size(listCargos)}">0</span>
-</div>
-<button id="add-cargo-btn" onclick="window.location.href='/new'">Добавить груз</button>
-<div id="histogram-container">
-    <canvas id="histogram"></canvas>
+            // Создание гистограммы
+            const histogramElement = document.getElementById('histogram');
+            new Chart(histogramElement, config);
+        }
+        document.addEventListener('DOMContentLoaded', createHistogram);
+    </script>
+    <div class="cargo-counter">
+        Всего грузов: <span th:text="${#lists.size(listCargos)}">0</span>
+    </div>
+    <button id="add-cargo-btn" onclick="window.location.href='/new'">Добавить груз</button>
+    <div id="histogram-container">
+        <canvas id="histogram"></canvas>
+    </div>
 </div>
 </body>
 </html>
+

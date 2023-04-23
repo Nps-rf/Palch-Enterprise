@@ -5,9 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Добавить груз</title>
   <link rel="stylesheet" href="../styles.css">
+  <script src="https://unpkg.com/faker@5.5.3/dist/faker.min.js"></script>
 </head>
 <body>
 <h1>Добавить груз</h1>
+<script>
+  function fillFormWithFakeData() {
+    document.getElementById("cargo-name").value = faker.commerce.productName();
+    document.getElementById("cargo-content").value = faker.commerce.productDescription();
+    document.getElementById("departure-city").value = faker.address.city();
+    document.getElementById("arrival-city").value = faker.address.city();
+
+    const today = new Date();
+    const departureDate = new Date(today);
+    departureDate.setDate(today.getDate() + faker.datatype.number({ min: -22, max: 5 }));
+    document.getElementById("departure-date").value = departureDate.toISOString().split("T")[0];
+
+    const arrivalDate = new Date(departureDate);
+    arrivalDate.setDate(departureDate.getDate() + faker.datatype.number({ min: -22, max: 5 }));
+    document.getElementById("arrival-date").value = arrivalDate.toISOString().split("T")[0];
+  }
+</script>
 <form action="#" th:action="@{/new}" th:object="${Cargo}" method="post" id="add-cargo-form">
   <label for="cargo-name">Название груза:</label>
   <input type="text" th:field="*{v_name}" id="cargo-name" required>
@@ -28,6 +46,7 @@
   <input type="date" th:field="*{arrival_date}" id="arrival-date" required>
 
   <button type="submit">Добавить груз</button>
+  <button onclick="fillFormWithFakeData()">Сгенерировать данные</button>
 </form>
 <a href="/">Вернуться на главную страницу</a>
 </body>

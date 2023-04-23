@@ -10,11 +10,16 @@ public class CargoService {
     private CargoRepository repo;
 
     //Поиск и фильтр
-    public List<Cargo> listAll(String keyword){
-        if (keyword!=null){
-            return repo.search(keyword);
+    public List<Cargo> listAll(String keyword, String departureDate) {
+        if (keyword != null && departureDate != null) {
+            return repo.searchByKeywordAndDepartureDate(keyword, departureDate);
+        } else if (keyword != null) {
+            return repo.searchByKeyword(keyword);
+        } else if (departureDate != null) {
+            return repo.filterByDepartureDate(departureDate);
+        } else {
+            return repo.findAll();
         }
-        return repo.findAll();
     }
 
     public void save(Cargo cargo){

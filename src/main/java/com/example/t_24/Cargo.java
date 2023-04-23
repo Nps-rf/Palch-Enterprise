@@ -15,19 +15,13 @@ public class Cargo {
     private String arrival_city; //город прибытия груза
     private String arrival_date; //дата прибытия груза
 
-    protected Cargo() {
-
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public void setId(Long id) { this.id = id; }
 
     public String getV_name() {
         return v_name;
