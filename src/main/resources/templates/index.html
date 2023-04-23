@@ -98,14 +98,14 @@
 
         // Создание гистограммы
         const histogramElement = document.getElementById('histogram');
-        const histogramChart = new Chart(histogramElement, config);
+        new Chart(histogramElement, config);
     }
     document.addEventListener('DOMContentLoaded', createHistogram);
 </script>
 <div class="cargo-counter">
     Всего грузов: <span th:text="${#lists.size(listCargos)}">0</span>
 </div>
-<button id="add-cargo-btn">Добавить груз</button>
+<button id="add-cargo-btn" onclick="window.location.href='/new'">Добавить груз</button>
 <div id="histogram-container">
     <canvas id="histogram"></canvas>
 </div>

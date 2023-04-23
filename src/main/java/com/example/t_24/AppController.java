@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -28,12 +25,18 @@ public class AppController {
     @RequestMapping("/new")
     public String showNewCargoForm(Model model) {
         Cargo cargo = new Cargo();
-        model.addAttribute("cargo", cargo);
+        model.addAttribute("Cargo", cargo);
         return "new_cargo";
     }
 
-    @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public String saveCargo(@ModelAttribute("cargo") Cargo cargo) {
+    @PostMapping("/new")
+    public String saveNewCargo(@ModelAttribute("Cargo") Cargo cargo) {
+        service.save(cargo);
+        return "redirect:/";
+    }
+
+    @PostMapping("/edit")
+    public String saveEditedCargo(@ModelAttribute("Cargo") Cargo cargo) {
         service.save(cargo);
         return "redirect:/";
     }

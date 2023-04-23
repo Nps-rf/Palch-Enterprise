@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,26 +8,26 @@
 </head>
 <body>
 <h1>Редактировать груз</h1>
-<form id="edit-cargo-form">
-  <input type="hidden" id="cargo-id">
+<form action="#" th:action="@{/edit}" th:object="${Cargo}" method="post" id="edit-cargo-form">
+  <input type="hidden" th:field="*{id}" id="cargo-id">
 
   <label for="cargo-name">Название груза:</label>
-  <input type="text" id="cargo-name" required>
+  <input type="text" th:field="*{v_name}" id="cargo-name" required>
 
   <label for="cargo-content">Содержимое груза:</label>
-  <textarea id="cargo-content" required></textarea>
+  <textarea th:field="*{content}" id="cargo-content" required></textarea>
 
   <label for="departure-city">Город отправки:</label>
-  <input type="text" id="departure-city" required>
+  <input type="text" th:field="*{dispatch_city}" id="departure-city" required>
 
   <label for="departure-date">Дата отправки:</label>
-  <input type="date" id="departure-date" required>
+  <input type="date" th:field="*{departure_date}" id="departure-date" required>
 
   <label for="arrival-city">Город прибытия:</label>
-  <input type="text" id="arrival-city" required>
+  <input type="text" th:field="*{arrival_city}" id="arrival-city" required>
 
   <label for="arrival-date">Дата прибытия:</label>
-  <input type="date" id="arrival-date" required>
+  <input type="date" th:field="*{arrival_date}" id="arrival-date" required>
 
   <button type="submit">Сохранить изменения</button>
 </form>
