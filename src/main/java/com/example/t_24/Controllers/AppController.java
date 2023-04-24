@@ -1,4 +1,4 @@
-package com.example.t_24;
+package com.example.t_24.Controllers;
 
 import com.example.t_24.Entity.Cargo;
 import com.example.t_24.Service.CargoService;
