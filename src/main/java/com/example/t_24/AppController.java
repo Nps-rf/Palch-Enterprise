@@ -3,6 +3,7 @@ package com.example.t_24;
 import com.example.t_24.Entity.Cargo;
 import com.example.t_24.Service.CargoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -35,9 +36,9 @@ public class AppController {
     }
 
     @PostMapping("/new")
-    public String saveNewCargo(@ModelAttribute("Cargo") Cargo cargo) {
+    public ResponseEntity<String> saveNewCargo(@ModelAttribute("Cargo") Cargo cargo) {
         service.save(cargo);
-        return "redirect:/";
+        return ResponseEntity.ok("Cargo saved");
     }
 
     @GetMapping("/edit/{id}")

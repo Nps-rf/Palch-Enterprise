@@ -10,6 +10,25 @@
 <body>
 <h1>Добавить груз</h1>
 <script>
+  async function submitFakeData() {
+    const numberOfEntries = document.getElementById("number-of-entries").value;
+    for (let i = 0; i < numberOfEntries; i++) {
+      fillFormWithFakeData();
+      await submitForm();
+    }
+  }
+
+  function submitForm() {
+    return new Promise((resolve) => {
+      const form = document.getElementById("add-cargo-form");
+      const formData = new FormData(form);
+      fetch(form.action, {
+        method: "POST",
+        body: formData,
+      }).then(() => resolve());
+    });
+  }
+
   function fillFormWithFakeData() {
     document.getElementById("cargo-name").value = faker.commerce.productName();
     document.getElementById("cargo-content").value = faker.commerce.productDescription();
@@ -18,11 +37,11 @@
 
     const today = new Date();
     const departureDate = new Date(today);
-    departureDate.setDate(today.getDate() + faker.datatype.number({ min: -22, max: 5 }));
+    departureDate.setDate(today.getDate() + faker.datatype.number({ min: -25, max: 6 }));
     document.getElementById("departure-date").value = departureDate.toISOString().split("T")[0];
 
     const arrivalDate = new Date(departureDate);
-    arrivalDate.setDate(departureDate.getDate() + faker.datatype.number({ min: -22, max: 5 }));
+    arrivalDate.setDate(departureDate.getDate() + faker.datatype.number({ min: -25, max: 6 }));
     document.getElementById("arrival-date").value = arrivalDate.toISOString().split("T")[0];
   }
 </script>
@@ -46,7 +65,9 @@
   <input type="date" th:field="*{arrival_date}" id="arrival-date" required>
 
   <button type="submit">Добавить груз</button>
-  <button onclick="fillFormWithFakeData()">Сгенерировать данные</button>
+  <label for="number-of-entries">Количество записей:</label>
+  <input type="number" id="number-of-entries" min="1" value="1">
+  <button type="button" onclick="submitFakeData()">Сгенерировать данные и добавить</button>
 </form>
 <a href="/">Вернуться на главную страницу</a>
 </body>
